@@ -1,0 +1,36 @@
+services:
+  food-detector:
+    build: food-detector
+    container_name: food-detector
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydb
+    volumes:
+      - ./food-detector:/app
+    networks:
+      - health-ai
+
+  mongo:
+    image: mongo
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_DATABASE: healthai
+    networks:
+      - health-ai
+
+volumes:
+  mongo_data:
+
+networks:
+  health-ai:
+    driver: bridge
