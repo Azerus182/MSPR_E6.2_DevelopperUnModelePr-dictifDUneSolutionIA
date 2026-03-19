@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI - Scan Repas</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        button { background-color: #2ecc71; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; margin-top: 15px; width: 100%; }
+        button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        #resultArea { margin-top: 20px; padding: 15px; border-radius: 8px; background-color: #e8f6f3; display: none; }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <h1>📸 Analyser mon repas</h1>
+        <p>Découvrez les calories de votre plat en une photo !</p>
+
+        <form id="uploadForm">
+            <input type="file" id="foodImage" accept="image/*" required style="margin-bottom: 10px;">
+            <button type="submit" id="submitBtn">Analyser l'image</button>
+        </form>
+
+        <div id="resultArea">
+            <h2>Résultat de l'IA :</h2>
+            <p>Plat détecté : <strong id="foodName" style="font-size: 1.3em; color: #2c3e50;">...</strong></p>
+            <p>Taux de confiance : <strong id="confidenceScore">...</strong>%</p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
