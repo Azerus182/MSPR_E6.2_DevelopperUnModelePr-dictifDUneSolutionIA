@@ -2,4 +2,5 @@
 
 ## Table of Contents
 - [Architecture](doc/Architecture.md)
-- [Choix des Outils](#doc/Tools.md)
+- [Choix des Outils](doc/Tools.md)
+- [Services](doc/Services.md)
