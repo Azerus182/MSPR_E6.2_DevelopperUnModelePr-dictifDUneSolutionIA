@@ -1,0 +1,36 @@
+# =========================
+# 🐍 BACKEND (Python)
+# =========================
+# Environnements virtuels
+.venv/
+venv/
+env/
+
+# Fichiers de cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# ⚛️ FRONTEND (Node / React / Vite)
+# =========================
+node_modules/
+dist/
+dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# 🔐 SÉCURITÉ & OS
+# =========================
+# Fichiers d'environnement (Mots de passe, clés API)
+.env
+
+# Fichiers systèmes
+.DS_Store
+Thumbs.db
+
+# Fichiers d'éditeurs (VS Code, IntelliJ)
+.vscode/
+.idea/
