@@ -1,7 +1,13 @@
+
+
+backend/account/data/*
+!backend/account/data/.gitkeep
+
 # =========================
 # 🐍 BACKEND (Python)
 # =========================
 # Environnements virtuels
+
 .venv/
 venv/
 env/
