@@ -31,7 +31,8 @@ MONGO_URI = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017/healthai")
 try:
     mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
     mongo_client.server_info()
-    db = mongo_client.get_default_database() if mongo_client.get_default_database() else mongo_client["healthai"]
+    default_db = mongo_client.get_default_database()
+    db = default_db if default_db is not None else mongo_client["healthai"]
     predictions_collection = db["predictions"]
     print(f"✅ MongoDB connecté à {MONGO_URI}")
 except Exception as e:

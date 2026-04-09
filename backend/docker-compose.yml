@@ -1,13 +1,11 @@
 services:
-
-# Account
   account:
     container_name: account
     build:
       context: account
       dockerfile: Dockerfile.api
     ports:
-      - "8000:8000"
+      - "4000:4000"
     depends_on:
       - account-data
     environment:
@@ -17,21 +15,18 @@ services:
       - DB_PORT=3306
       - DB_NAME=account
     volumes:
-      - ./account/src:/app
+      - ./account:/app
     networks:
       - health-ai
-    profiles: ["account"]
-
 
   account-data:
     container_name: account-data
-    build:
-      context: account
-      dockerfile: Dockerfile.data
+    image: mysql:8.0
     ports:
       - "3306:3306"
     volumes:
       - account-data:/var/lib/mysql
+      - ./account/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: account
@@ -40,41 +35,37 @@ services:
     restart: unless-stopped
     networks:
       - health-ai
-    profiles: ["account"]
 
-# # Food Detection
-#   food-detector:
-#     build:
-#       context: food-detector
-#       dockerfile: Dockerfile.api
-#     container_name: food-detector
-#     ports:
-#       - "5001:5000"
-#     environment:
-#       - MONGO_URI=mongodb://mongo:27017/mydb
-#     volumes:
-#       - ./food-detector/src/:/app
-#     networks:
-#       - health-ai
+  food-detector:
+    build:
+      context: food-detector
+      dockerfile: Dockerfile
+    container_name: food-detector
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://admin:secret@mongo:27017/mydb?authSource=admin
+    volumes:
+      - ./food-detector:/app
+    networks:
+      - health-ai
 
-#     profiles: ["food-detector"]
-
-#   food-detector-data:
-#     container_name: food-detector-data
-#     build:
-#       context: food-detector
-#       dockerfile: Dockerfile.data
-#     ports:
-#       - "3306:3306"
-#     volumes:
-#       - ./food-detector/data:/data/db
-#     networks:
-#       - health-ai
-#     restart: unless-stopped
-#     environment:
-#       MONGO_INITDB_ROOT_USERNAME: admin
-#       MONGO_INITDB_ROOT_PASSWORD: password
-#     profiles: ["food-detector"]
+  mongo:
+    image: mongo
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_DATABASE: mydb
+    networks:
+      - health-ai
 
 networks:
   health-ai:
@@ -82,3 +73,4 @@ networks:
 
 volumes:
   account-data:
+  mongo_data:
