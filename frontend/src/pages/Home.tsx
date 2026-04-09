@@ -1,5 +1,4 @@
 import { Bell, Camera } from "lucide-react";
-import { Progress } from "../components/ui/progress";
 
 export function Home() {
   // Données mockées

@@ -1,0 +1,24 @@
+{
+"short_name": "Health AI",
+  "name": "Health AI - Votre assistant de santé intelligent",
+  "description": "Votre assistant de santé intelligent basé sur l'IA.",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#317EFB",
+  "background_color": "#ffffff",
+  "orientation": "portrait"
+}
