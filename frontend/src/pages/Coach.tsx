@@ -104,7 +104,7 @@ export function Coach() {
     formData.append("image", imageFile);
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/predict", {
+        const response = await fetch("http://127.0.0.1:5000/predict", {
             method: "POST",
             body: formData,
         });
@@ -125,7 +125,7 @@ export function Coach() {
         }
     } catch (error) {
         console.error("Erreur de connexion:", error);
-        alert("Impossible de joindre l'API Python. Est-elle lancée sur le port 8000 ?");
+        alert("Impossible de joindre l'API Python. Est-elle lancée sur le port 5000 ?");
     } finally {
         setIsAnalyzing(false);
     }
