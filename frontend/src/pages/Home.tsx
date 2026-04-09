@@ -1,4 +1,5 @@
 import { Bell, Camera } from "lucide-react";
+import { Link } from "react-router";
 import { Progress } from "../components/ui/progress";
 
 export function Home() {
@@ -22,18 +23,38 @@ export function Home() {
   return (
     <div className="max-w-md mx-auto px-4 py-6">
       {/* En-tête */}
-      <header className="flex items-center justify-between mb-8">
-        <h1 className="text-[#1E3A5F] text-xl">
-          Bonjour <span className="font-semibold">{userName}</span> !<br />
-          Prêt(e) pour tes objectifs du jour ?
-        </h1>
-        <button 
-          className="relative p-2 text-[#2C3E50] hover:text-[#10B981] transition-colors"
-          aria-label="Notifications"
-        >
-          <Bell className="w-6 h-6" />
-          <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#EF4444] rounded-full" aria-hidden="true"></span>
-        </button>
+      <header className="flex flex-col gap-4 mb-8">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-[#1E3A5F] text-xl">
+              Bonjour <span className="font-semibold">{userName}</span> !<br />
+              Prêt(e) pour tes objectifs du jour ?
+            </h1>
+            <p className="text-sm text-[#6B7280] mt-1">Connecte-toi pour synchroniser ton programme.</p>
+          </div>
+          <button 
+            className="relative p-2 text-[#2C3E50] hover:text-[#10B981] transition-colors"
+            aria-label="Notifications"
+          >
+            <Bell className="w-6 h-6" />
+            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#EF4444] rounded-full" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div className="flex gap-3">
+          <Link
+            to="/login"
+            className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-[#10B981] text-[#10B981] hover:bg-[#ECFDF5] transition"
+          >
+            Se connecter
+          </Link>
+          <Link
+            to="/register"
+            className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-[#10B981] text-white hover:bg-[#059669] transition"
+          >
+            S'inscrire
+          </Link>
+        </div>
       </header>
 
       {/* Action Principale */}

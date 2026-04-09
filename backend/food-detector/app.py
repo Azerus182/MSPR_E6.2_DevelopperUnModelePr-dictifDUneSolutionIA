@@ -1,9 +1,13 @@
+import os
+from datetime import datetime
+
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import io
 import numpy as np
 import pickle
+from pymongo import MongoClient
 
 # Keras & TensorFlow
 from tensorflow.keras.applications.inception_v3 import InceptionV3, preprocess_input
@@ -22,6 +26,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017/healthai")
+try:
+    mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+    mongo_client.server_info()
+    db = mongo_client.get_default_database() if mongo_client.get_default_database() else mongo_client["healthai"]
+    predictions_collection = db["predictions"]
+    print(f"✅ MongoDB connecté à {MONGO_URI}")
+except Exception as e:
+    print(f"❌ Impossible de connecter MongoDB : {e}")
+    predictions_collection = None
 
 # --- 1. CHARGEMENT DES MODÈLES ---
 print("⏳ Chargement du modèle d'Embedding (InceptionV3)...")
@@ -87,7 +102,19 @@ async def predict_food(image: UploadFile = File(...)):
         # 5. Récupérer le nom du plat via le mapping
         pred_class_name = mapping_numeric.get(pred_label, "Aliment inconnu")
         
-        # 6. Renvoyer la réponse au frontend
+        # 6. Enregistrer la prédiction dans MongoDB
+        if predictions_collection is not None:
+            try:
+                predictions_collection.insert_one({
+                    "filename": image.filename,
+                    "prediction": pred_class_name,
+                    "confidence_percent": float(pred_confidence * 100),
+                    "created_at": datetime.utcnow()
+                })
+            except Exception as e:
+                print(f"⚠️ Échec de l'enregistrement MongoDB : {e}")
+
+        # 7. Renvoyer la réponse au frontend
         return {
             "status": "success",
             "filename": image.filename,

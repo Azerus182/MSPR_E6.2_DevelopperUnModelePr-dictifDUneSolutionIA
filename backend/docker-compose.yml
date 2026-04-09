@@ -7,9 +7,22 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mydb
+      - MONGO_URI=mongodb://admin:secret@mongo:27017/mydb?authSource=admin
     volumes:
       - ./food-detector:/app
+    networks:
+      - health-ai
+
+  account:
+    build: account
+    container_name: account
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://admin:secret@mongo:27017/healthai?authSource=admin
+      - JWT_SECRET=healthai_secret
     networks:
       - health-ai
 

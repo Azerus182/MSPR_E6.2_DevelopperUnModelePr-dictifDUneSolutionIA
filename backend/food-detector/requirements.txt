@@ -10,3 +10,4 @@ python-multipart
 tensorflow
 Orange3
 Orange3-ImageAnalytics
+pymongo

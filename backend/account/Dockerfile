@@ -1,13 +1,12 @@
-FROM python:3.11-slim
+FROM node:20-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
+COPY package*.json ./
+RUN npm install --production
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 4000
 
-CMD ["python", "app.py"]
+CMD ["node", "server.js"]
