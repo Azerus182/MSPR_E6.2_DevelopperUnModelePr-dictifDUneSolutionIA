@@ -1,36 +1,83 @@
 services:
-  food-detector:
-    build: food-detector
-    container_name: food-detector
+
+# Account
+  account:
+    container_name: account
+    build:
+      context: account
+      dockerfile: Dockerfile.api
     ports:
-      - "5000:5000"
+      - "8000:8000"
     depends_on:
-      - mongo
+      - account-data
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mydb
+      - DB_USER=user
+      - DB_PASSWORD=userpassword
+      - DB_HOST=account-data
+      - DB_PORT=3306
+      - DB_NAME=account
     volumes:
-      - ./food-detector:/app
+      - ./account/src:/app
     networks:
       - health-ai
+    profiles: ["account"]
 
-  mongo:
-    image: mongo
-    container_name: mongo_db
-    restart: always
+  account-data:
+    container_name: account-data
+    build:
+      context: account
+      dockerfile: Dockerfile.data
     ports:
-      - "27017:27017"
+      - "3306:3306"
     volumes:
-      - mongo_data:/data/db
+      - account-data:/var/lib/mysql
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: secret
-      MONGO_INITDB_DATABASE: healthai
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: account
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    restart: unless-stopped
     networks:
       - health-ai
+    profiles: ["account"]
 
-volumes:
-  mongo_data:
+# # Food Detection
+#   food-detector:
+#     build:
+#       context: food-detector
+#       dockerfile: Dockerfile.api
+#     container_name: food-detector
+#     ports:
+#       - "5001:5000"
+#     environment:
+#       - MONGO_URI=mongodb://mongo:27017/mydb
+#     volumes:
+#       - ./food-detector/src/:/app
+#     networks:
+#       - health-ai
+
+#     profiles: ["food-detector"]
+
+#   food-detector-data:
+#     container_name: food-detector-data
+#     build:
+#       context: food-detector
+#       dockerfile: Dockerfile.data
+#     ports:
+#       - "3306:3306"
+#     volumes:
+#       - ./food-detector/data:/data/db
+#     networks:
+#       - health-ai
+#     restart: unless-stopped
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: admin
+#       MONGO_INITDB_ROOT_PASSWORD: password
+#     profiles: ["food-detector"]
 
 networks:
   health-ai:
     driver: bridge
+
+volumes:
+  account-data:

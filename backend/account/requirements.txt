@@ -1,2 +1,8 @@
-flask
-pymongo
+fastapi
+uvicorn[standard]
+SQLAlchemy
+pymysql
+databases[mysql]
+aiomysql
+passlib
+pyjwt
