@@ -4,6 +4,7 @@ from PIL import Image
 import io
 import numpy as np
 import pickle
+from contextlib import asynccontextmanager
 
 from tensorflow.keras.applications.inception_v3 import InceptionV3, preprocess_input
 from tensorflow.keras.preprocessing import image as keras_image
@@ -32,7 +33,6 @@ async def lifespan(app: FastAPI):
         orange_model = None
     yield
 
-
 app = FastAPI(
     title="HealthAI - Food Detector API",
     description="Micro-service food detection",
@@ -46,8 +46,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
 
 def extract_features(pil_img):
     img = pil_img.resize((299, 299))
