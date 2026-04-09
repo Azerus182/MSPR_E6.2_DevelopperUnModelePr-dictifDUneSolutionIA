@@ -1,22 +1,15 @@
-FROM debian:latest
+FROM node:20-slim
 
-ENV DEBIAN_FRONTEND=noninteractive
+WORKDIR /app
 
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y \
-    curl \
-    gnupg2 \
-    lsb-release \
-    ca-certificates \
-    openjdk-25-jdk
+COPY package*.json ./
+RUN npm install
 
-ENV JAVA_HOME=/usr/lib/jvm/java-25-openjdk-amd64/
-ENV PATH=$JAVA_HOME/bin:$PATH
+COPY . .
 
-RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
-    apt-get install -y nodejs
+EXPOSE 5173
 
-RUN java -version && node -v
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 
 WORKDIR /app
 
