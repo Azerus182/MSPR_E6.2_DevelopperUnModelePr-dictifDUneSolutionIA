@@ -1,8 +1,17 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+
+backend/account/data/*
+!backend/account/data/.gitkeep
+
+>>>>>>> florent/master
 # =========================
 # 🐍 BACKEND (Python)
 # =========================
 # Environnements virtuels
+
 .venv/
 venv/
 env/
