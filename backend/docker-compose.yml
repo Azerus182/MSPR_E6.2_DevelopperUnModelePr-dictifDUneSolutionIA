@@ -1,49 +1,84 @@
 services:
-  food-detector:
-    build: food-detector
-    container_name: food-detector
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mongo
-    environment:
-      - MONGO_URI=mongodb://admin:secret@mongo:27017/mydb?authSource=admin
-    volumes:
-      - ./food-detector:/app
-    networks:
-      - health-ai
 
+# Account
   account:
-    build: account
     container_name: account
+    build:
+      context: account
+      dockerfile: Dockerfile.api
     ports:
-      - "4000:4000"
+      - "8000:8000"
     depends_on:
-      - mongo
+      - account-data
     environment:
-      - MONGO_URI=mongodb://admin:secret@mongo:27017/healthai?authSource=admin
-      - JWT_SECRET=healthai_secret
-    networks:
-      - health-ai
-
-  mongo:
-    image: mongo
-    container_name: mongo_db
-    restart: always
-    ports:
-      - "27017:27017"
+      - DB_USER=user
+      - DB_PASSWORD=userpassword
+      - DB_HOST=account-data
+      - DB_PORT=3306
+      - DB_NAME=account
     volumes:
-      - mongo_data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: secret
-      MONGO_INITDB_DATABASE: healthai
+      - ./account/src:/app
     networks:
       - health-ai
+    profiles: ["account"]
 
-volumes:
-  mongo_data:
+
+  account-data:
+    container_name: account-data
+    build:
+      context: account
+      dockerfile: Dockerfile.data
+    ports:
+      - "3306:3306"
+    volumes:
+      - account-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: account
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    restart: unless-stopped
+    networks:
+      - health-ai
+    profiles: ["account"]
+
+# # Food Detection
+#   food-detector:
+#     build:
+#       context: food-detector
+#       dockerfile: Dockerfile.api
+#     container_name: food-detector
+#     ports:
+#       - "5001:5000"
+#     environment:
+#       - MONGO_URI=mongodb://mongo:27017/mydb
+#     volumes:
+#       - ./food-detector/src/:/app
+#     networks:
+#       - health-ai
+
+#     profiles: ["food-detector"]
+
+#   food-detector-data:
+#     container_name: food-detector-data
+#     build:
+#       context: food-detector
+#       dockerfile: Dockerfile.data
+#     ports:
+#       - "3306:3306"
+#     volumes:
+#       - ./food-detector/data:/data/db
+#     networks:
+#       - health-ai
+#     restart: unless-stopped
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: admin
+#       MONGO_INITDB_ROOT_PASSWORD: password
+#     profiles: ["food-detector"]
 
 networks:
   health-ai:
     driver: bridge
+
+volumes:
+  account-data:
