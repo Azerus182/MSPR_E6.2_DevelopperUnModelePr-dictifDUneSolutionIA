@@ -1,4 +1,12 @@
-flask
-pymongo
-transformers
-torch
+fastapi
+uvicorn
+pydantic
+scikit-learn
+numpy
+
+Pillow
+python-multipart
+
+tensorflow
+Orange3
+Orange3-ImageAnalytics

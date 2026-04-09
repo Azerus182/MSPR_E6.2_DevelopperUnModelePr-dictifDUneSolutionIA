@@ -34,7 +34,12 @@ async def lifespan(app: FastAPI):
     yield
     await db.disconnect()
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    title="HealthAI - Food Detector API",
+    description="Micro-service food detection",
+    version="1.0.0"
+)
 
 def create_access_token(data: dict):
     token = data.copy()
