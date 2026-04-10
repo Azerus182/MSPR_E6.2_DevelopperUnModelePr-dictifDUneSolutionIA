@@ -24,8 +24,7 @@ WORKDIR /app
 # RUN sdkmanager --update
 RUN sdkmanager "build-tools;35.0.0" "platforms;android-36"
 RUN yes | sdkmanager --licenses
-
+RUN npm install -g typescript
 ENV ANDROID_HOME=/opt/android-sdk/
 
-RUN ["sh", "-c", "npm run build; npx cap sync android; cd android; ./gradlew assembleRelease --info"]
-CMD tail -f /dev/null
+CMD ["sh", "-c", "npm install; npm run build; npx cap init; npx cap sync android; cd android; ./gradlew assembleRelease --info"]
